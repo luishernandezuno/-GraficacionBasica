@@ -1,0 +1,51 @@
+1.- Has tu cambas mas ancho, en vez de 500, que ahora sea 800.
+	Respuesta: Se hace mas grande el canvas.
+
+2.- El color de limpado, sea Morado en vez de Negro.
+	Respuesta: gl.clearColor(0.5, 0.0, 0.9, 1.0);
+
+3. Estira los vertices del Triangulo de tal forma que ocupe el doble de espacio, ve la siguiente imagen. El azul es como esta actualmente y en Rojo como debe quedar. Has lo mismo con el triangulo.
+	gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
+        var vertices = [
+             0.0,  1.0,  0.0, //top
+            -1.0, -1.0,  0.0, //abajo a la izq
+             1.0, -1.0,  0.0 //abajo a la der
+        ];
+
+4. Ahora cambia la perspectiva, contestando las siguientes 
+interrogantes. 
+
+¿Que sucede cuando cambias el angulo de vision? en vez de 45 
+grados, cambialo a 30, 35, 40, 90 y 150. Dime que sucede y por 
+que cambia.
+Dejalo en 40 para continuar.
+	Respuesta: Mientras menor es el angulo de visión es mas grande la figura, es depende del la perspectiva con que se mira.
+
+5. Ahora tus figuras estan muy juntas. Vamos a separarlas el doble.
+
+	Respuesta: mat4.translate(mvMatrix, [-3, 0.0, -14.0]);
+
+6. Al hacer lo anterior las estas perjudicando a las 2 figuras. Ahora solo queda mover el cuadrado
+
+	Respuesta: mat4.translate(mvMatrix, [6.0, 0.0, 0.0]);
+
+7. Intenta lo siguiente y contesta:
+
+En vez de gl.TRIANGLES y gl.TRIANGLE_SRIPT tienes estas opciones:
+gl.POINTS, gl.LINES, gl.LINE_STRIP, gl.LINE_LOOP y gl.TRIANGLE_FAN
+Experimenta con cada una de ellas y documenta tu tarea. Subela en 
+esta plataforma para calificarla. 
+R= Con gl.POINTS no se miran.
+R= Con gl.LINES se mira una linea del triengulo y dos del cuadrado.
+R= Con gl.LINE_STRIP se cominezan amirar dos lineas de los triangulos
+que forman las figuras del triangulo el cuadrado.
+R= Con gl.LINE_LOOP se obserban claramente triangulos con los cuales 
+se forman las figuras.
+R= Con gl.TRIANGLE_FAN se pintan los triangulos, pero al cuadrado le 
+falta una parte de pintar
+
+8. Regresa a gl.TRIANGLES y gl.TRIANGLE_SRIPT respectivamente y sube 
+tu tarea. 
+
+NOTA: Yo no lo tengo el gl.TRIANGLE_SRIPT yo lo tengo escrito de 
+esta manera gl.TRIANGLE_STRIP.
