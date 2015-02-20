@@ -34,18 +34,14 @@ Dejalo en 40 para continuar.
 En vez de gl.TRIANGLES y gl.TRIANGLE_SRIPT tienes estas opciones:
 gl.POINTS, gl.LINES, gl.LINE_STRIP, gl.LINE_LOOP y gl.TRIANGLE_FAN
 Experimenta con cada una de ellas y documenta tu tarea. Subela en 
-esta plataforma para calificarla. 
-R= Con gl.POINTS no se miran.
-R= Con gl.LINES se mira una linea del triengulo y dos del cuadrado.
-R= Con gl.LINE_STRIP se cominezan amirar dos lineas de los triangulos
-que forman las figuras del triangulo el cuadrado.
-R= Con gl.LINE_LOOP se obserban claramente triangulos con los cuales 
-se forman las figuras.
-R= Con gl.TRIANGLE_FAN se pintan los triangulos, pero al cuadrado le 
-falta una parte de pintar
+esta plataforma para calificarla.
+ 
+Respuesta: Con gl.POINTS no se ven, porque es para puntos.
+Respuesta: Con gl.LINES se mira una linea del triangulo y dos del cuadrado.
+	   Con gl.LINE_STRIP se ven dos lineas de los triangulos que forman las figuras del triangulo el cuadrado.
+Respuesta: Con gl.LINE_LOOP se obserban claramente triangulos con los cuales se forman las figuras.
+Respuesta: Con gl.TRIANGLE_FAN se pintan los triangulos, pero al cuadrado le falta una parte de pintar
 
 8. Regresa a gl.TRIANGLES y gl.TRIANGLE_SRIPT respectivamente y sube 
 tu tarea. 
 
-NOTA: Yo no lo tengo el gl.TRIANGLE_SRIPT yo lo tengo escrito de 
-esta manera gl.TRIANGLE_STRIP.
