@@ -5,12 +5,10 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 
-
-
 <html>
 <head>
 
-<title>Tare Semana4</title>
+<title>Semana6</title>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 
 <script type="text/javascript" src="./glMatrix-0.9.5.min.js"></script>
@@ -20,7 +18,10 @@ and open the template in the editor.
     precision highp float;   
     #endif
 
-varying vec4 vColor;//semana3
+//varying vec4 vColor;//semana3
+	varying vec2 vTextureCoord;//semana6
+	uniform sampler2D uSampler;//semana6
+	
     void main(void) {
 	   //color blanco 
         //gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
@@ -28,22 +29,26 @@ varying vec4 vColor;//semana3
         //gl_FragColor = vec4(0.0, 1.0, 1.0, 1.0);
         //color purple
        // gl_FragColor = vec4(1, .0, 1.0, 1.0);
-        gl_FragColor = vColor;
+        //gl_FragColor = vColor;
+		 gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t)); //Semana 6
     }
 </script>
 
 <script id="shader-vs" type="x-shader/x-vertex">
     attribute vec3 aVertexPosition;
-     attribute vec4 aVertexColor;//semana3
-
+   //  attribute vec4 aVertexColor;//semana3
+		attribute vec2 aTextureCoord;//semana6
+		
     uniform mat4 uMVMatrix;
     uniform mat4 uPMatrix;
     
- varying vec4 vColor;
+ //varying vec4 vColor;
+	varying vec2 vTextureCoord;//semana6
  
     void main(void) {
         gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-        vColor= aVertexColor;//semana3
+        //vColor= aVertexColor;//semana3
+		vTextureCoord= aTextureCoord;//semana6
     }
 </script>
 
@@ -117,18 +122,15 @@ varying vec4 vColor;//semana3
 
         gl.useProgram(shaderProgram);
 
-        shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+         shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
         gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
         
-        shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-        gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);//semana3
+        shaderProgram.vertexTextureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord"); //Semana 6
+        gl.enableVertexAttribArray(shaderProgram.vertexTextureCoordAttribute); //Semana 6
 
         shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
         shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
     }
-    
-       
-
 
 
     var mvMatrix = mat4.create();
@@ -207,30 +209,50 @@ function mvPopMatrix() {
         triangleVertexPositionBuffer.itemSize = 3;//elementos del vector x,y,z 
         triangleVertexPositionBuffer.numItems = 12;//numero de vertices
         
-        triangleVertexColorBuffer =gl.createBuffer();//semana3
-        gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer);
-        var colors = [
-		//lado frontal
-            1.0, 0.0, 0.0, 1.0, //semana3  // arriba rojo 
-            0.0, 1.0, 0.0, 1.0, //semana3 // izq verde
-            0.0, 0.0, 1.0, 1.0,  //semana3 // der azul
-		//lado derecho
-            1.0, 0.0, 0.0, 1.0, 
-            0.0, 0.0, 1.0, 1.0, 
-            0.0, 1.0, 0.0, 1.0,
-		//lado trasero
-            1.0, 0.0, 0.0, 1.0, 
-            0.0, 1.0, 0.0, 1.0, 
-            0.0, 0.0, 1.0, 1.0,
-		//lado izq
-            1.0, 0.0, 0.0, 1.0, 
-            0.0, 0.0, 1.0, 1.0, 
-            0.0, 1.0, 0.0, 1.0
+		
+         triangleVertexTextureCoordBuffer = gl.createBuffer(); //Semana 6      
+        gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexTextureCoordBuffer); //Semana 6
+        var textureCoords = 
+        [
+            // Front face --Semana 6
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+
+            // Back face --Semana 6
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+            0.0, 0.0,
+
+            // Top face
+            0.0, 1.0,
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+
+             ////Bottom face
+            1.0, 1.0,
+            0.0, 1.0,
+            0.0, 0.0,
+            1.0, 0.0,
+
+            // Right face
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0,
+            0.0, 0.0,
+
+            // Left face
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 1.0
         ];
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW); //semana3
-        triangleVertexColorBuffer.itemSize = 4;//Tamano del color
-        triangleVertexColorBuffer.numItems = 12;//Numero del color
-        
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW); //Semana 6
+        triangleVertexTextureCoordBuffer.itemSize = 2; //Semana 6
+        triangleVertexTextureCoordBuffer.numItems = 8; //Semana 6
         
         //dubujar cuadro/ pentagono
         pentagonVertexPositionBuffer = gl.createBuffer();//Posicion
@@ -305,33 +327,48 @@ function mvPopMatrix() {
         hexagonoVertexColorBuffer.numItems = 4;
         
     }
-
+	var xRot=0; //semana6
+	var yRot=0; //semana6
+	var zRot=0; //semana6
+	
 //imprimir las figuras
     function drawScene() {
         
-        
-       
         gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); //borrarPantalla y profundidad del bufer
         
         //escala 
         mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
-        mat4.identity(mvMatrix); //restablweceLaVista
-        
-        //translate del triangulo
-        mat4.translate(mvMatrix, [-1.5, -1.0, -9.0]);  //mover izq 1.5 unidades y dentro de la pantalla
+
+        mat4.identity(mvMatrix);
+
+        mat4.translate(mvMatrix, [-3, -3.0, -25.0]);
+        mat4.translate(pMatrix, [-8.0, 0.0, 0.0]); //Semana 6
+
+		
+		//mat4.rotate(mvMatrix, degToRad(xRot),[1,1,0]); //semana6
+		//mat4.rotate(mvMatrix, degToRad(yRot),[0,1,0]); //semana6
+		//mat4.rotate(mvMatrix, degToRad(zRot),[0,0,1]); //semana6
+		
 		mvPushMatrix();//sem4
 		mat4.rotate(mvMatrix, degToRad(rTri), [0, 1, 0]);//sem4
+		
         gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
         gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute,triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
-        setMatrixUniforms();        
-        gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer);
-        gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, triangleVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);        
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, triangleVertexPositionBuffer.numItems);
-        mvPopMatrix();//sem4
+        
+         gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexTextureCoordBuffer); //Semana 6
+        gl.vertexAttribPointer(shaderProgram.vertexTextureCoordAttribute, triangleVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0); //Semana 6
+
+        gl.activeTexture(gl.TEXTURE0); //Semana 6
+        gl.bindTexture(gl.TEXTURE_2D, neheTexture); //Semana 6
+        gl.uniform1i(shaderProgram.samplerUniform, 0); //Semana 6
+		setMatrixUniforms();
+		gl.drawArrays(gl.TRIANGLE_STRIP, 0, triangleVertexPositionBuffer.numItems);
+        
+		mvPopMatrix();//sem4
 
         //translate del pentagono
-        mat4.translate(mvMatrix, [3.0, 0.0, -6.0]); 
+        mat4.translate(mvMatrix, [3.0, 0.0, -6.0]);  //6,0,-20
         mvPushMatrix();//sem4
         mat4.rotate(mvMatrix, degToRad(rSquare), [0, 1, 0]);//sem4
         gl.bindBuffer(gl.ARRAY_BUFFER, pentagonVertexPositionBuffer);
@@ -354,18 +391,38 @@ function mvPopMatrix() {
         setMatrixUniforms();
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, hexagonoVertexPositionBuffer.numItems);
 		
-		mvPopMatrix();//sem4
-		
-		
+		mvPopMatrix();//sem4	
     }
 
+	function handleLoadedTexture(texture) //Semana 6
+    {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+    
+    var neheTexture; //Semana 6
+    function initTexture() //Semana 6
+    {
+        neheTexture = gl.createTexture();
+        neheTexture.image = new Image();
+        neheTexture.image.onload = function()
+        {
+            handleLoadedTexture(neheTexture);
+        }
+        neheTexture.image.src = "UPBC.gif";
+    }
 
-
+		
     function webGLStart() {
         var canvas = document.getElementById("leccion1-canvas");
         initGL(canvas);
         initShaders();
         initBuffers();
+		initTexture();
 		//color negro
         //gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		////color morado
